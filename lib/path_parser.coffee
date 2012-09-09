@@ -3,7 +3,12 @@ XmlStream = require "xml-stream"
 exports.parse = (stream, cb) ->
   xml = new XmlStream stream
   xml.collect "path"
+
   paths = []
+  svg_size = {width: 0, height: 0}
+
+  xml.on "startElement: svg", (svg) ->
+    svg_size = {width: parseInt(svg.$.width), height: parseInt(svg.$.height)}
 
   xml.on "endElement: path", (path) ->
     pos = {x: 0, y: 0}
@@ -18,13 +23,13 @@ exports.parse = (stream, cb) ->
       # because we are triangulating we assume one M command and a Z command
       switch op[0]
         when "M", "L" # absolute
-          pos = coords
-          absolute_path.push(coords) if !exists_in_path(absolute_path, coords)
+          pos = {x: coords.x, y: svg_size.height - coords.y}
+          absolute_path.push(pos) if !exists_in_path(absolute_path, pos)
 
         when "m", "l" # relative
           pos.x += coords.x
-          pos.y += coords.y
-          absolute_path.push(coords) if !exists_in_path(absolute_path, coords)
+          pos.y -= coords.y
+          absolute_path.push(pos) if !exists_in_path(absolute_path, pos)
 
         when "V", "v", "H", "h"
           console.log "TODO: vertical and horizontal path operations"
