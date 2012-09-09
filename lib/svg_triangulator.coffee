@@ -29,6 +29,7 @@ exports.run = ->
       stream = fs.createReadStream args[0]
       path_parser.parse stream, (err, path_points) ->
         return cli.error(err) if err?
+        paths = []
 
         # triangulate the points for each path
         for path in path_points
@@ -53,8 +54,9 @@ exports.run = ->
               {x: trPoints[2].x, y: trPoints[2].y}
             ]
 
-          to_display = formatter segment, options
-          console.log util.inspect(to_display, false, null)
+          paths.push formatter(segment, options)
+
+        console.log util.inspect(paths, false, null)
 
 
 # format the output of the points
