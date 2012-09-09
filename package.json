@@ -1,0 +1,13 @@
+{
+  "name": "svg_triangulator",
+  "private": false,
+  "description": "Read Polygons from an SVG path and use constrained Delaunay triangulation to break up the polygon into something renderable by OpenGL ES",
+  "version": "0.1.0",
+  "homepage": "https://github.com/robmerrell/svg_triangulator",
+  "dependencies": {
+    "coffee-script": "1.3.3",
+    "cli": "0.4.4-1",
+    "xml-stream": "0.4.1"
+  },
+  "author": "rob@dimpixel.com"
+}
