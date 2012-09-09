@@ -1,4 +1,5 @@
 fs = require "fs"
+util = require "util"
 cli = require "cli"
 path_parser = require "./path_parser"
 poly2tri = require("./poly2tri").poly2tri
@@ -53,7 +54,7 @@ exports.run = ->
             ]
 
           to_display = formatter segment, options
-          console.log to_display
+          console.log util.inspect(to_display, false, null)
 
 
 # format the output of the points
@@ -61,12 +62,12 @@ formatter = (segment, options) ->
   if options.output == "raw"
     points = []
     points = points.concat([coord.x, coord.y]) for coord in segment.points
-    segment.points = points
+    segment.points = points.join ","
 
     if options.pathpoints
       pathpoints = []
       pathpoints = pathpoints.concat([coord.x, coord.y]) for coord in segment.pathpoints
-      segment.pathpoints = pathpoints
+      segment.pathpoints = pathpoints.join ","
 
     return segment
 
