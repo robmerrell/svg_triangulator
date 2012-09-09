@@ -39,8 +39,8 @@ exports.run = ->
 
           # segment is what we show to the user
           segment =
-            count: swctx.GetTriangles().length * 3
-            points: []
+            triangle_count: swctx.GetTriangles().length * 3
+            triangulated: []
 
           # add the svg path points to the coord if it was requested
           segment.pathpoints = path if options.pathpoints
@@ -48,7 +48,7 @@ exports.run = ->
           # iterate through all of the triangle pairs and add them to the output
           for val, id in swctx.GetTriangles()
             trPoints = [val.GetPoint(0), val.GetPoint(1), val.GetPoint(2)]
-            segment.points = segment.points.concat [
+            segment.triangulated = segment.triangulated.concat [
               {x: trPoints[0].x, y: trPoints[0].y}
               {x: trPoints[1].x, y: trPoints[1].y}
               {x: trPoints[2].x, y: trPoints[2].y}
@@ -62,9 +62,9 @@ exports.run = ->
 # format the output of the points
 formatter = (segment, options) ->
   if options.output == "raw"
-    points = []
-    points = points.concat([coord.x, coord.y]) for coord in segment.points
-    segment.points = points.join ","
+    triangulated = []
+    triangulated = triangulated.concat([coord.x, coord.y]) for coord in segment.triangulated
+    segment.triangulated = triangulated.join ","
 
     if options.pathpoints
       pathpoints = []
